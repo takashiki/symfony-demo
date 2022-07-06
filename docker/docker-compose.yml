@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:5.7.32
+    volumes:
+      - "db_app:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - 3306:3306
+    networks:
+      - symfony
+    env_file:
+      - .env
+      - .env.local
+  php:
+    build:
+      context: ./php
+      args:
+        TIMEZONE: ${TIMEZONE}
+    volumes:
+      - ../backend:/var/www/app:cached
+    networks:
+      - symfony
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - ../backend:/var/www/app:cached
+    depends_on:
+      - php
+    ports:
+      - 80:80
+    networks:
+      - symfony
+
+volumes:
+  db_app:
+
+
+networks:
+  symfony:
