@@ -7,7 +7,6 @@ use App\Pagination\Paginator;
 use App\Query\UserQuery;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -51,13 +50,14 @@ class UserRepository extends ServiceEntityRepository
             ->orderBy('u.id', 'ASC');
 
         if (isset($query->isActive)) {
+            // use parameter-binding to avoid SQL injection
             $qb->andWhere('u.is_active = :is_active')
                 ->setParameter('is_active', $query->isActive);
         }
 
         if (isset($query->isMember)) {
-            $qb->andWhere('u.is_member = :is_active')
-                ->setParameter('is_active', $query->isActive);
+            $qb->andWhere('u.is_member = :is_member')
+                ->setParameter('is_member', $query->isMember);
         }
 
         if (isset($query->lastLoginFrom)) {

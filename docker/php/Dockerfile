@@ -68,5 +68,7 @@ RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} >
 	&& printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini \
 	&& "date"
 
+WORKDIR /var/www/app
+
 CMD ["php-fpm"]
 EXPOSE 9000

@@ -5,6 +5,9 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 #[ORM\Table(name: "test_users")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -23,18 +26,23 @@ class User
     #[ORM\Column(type: 'string', length: 75)]
     private $email;
 
+    #[Ignore]
     #[ORM\Column(type: 'string', length: 255)]
     private $password;
 
+    #[Ignore]
     #[ORM\Column(type: 'boolean')]
     private $is_member;
 
+    #[Ignore]
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $is_active;
 
+    #[Ignore]
     #[ORM\Column(type: 'integer')]
     private $user_type;
 
+    #[Ignore]
     #[ORM\Column(type: 'datetime', nullable: true)]
     private $last_login_at;
 
@@ -115,6 +123,7 @@ class User
         return $this;
     }
 
+    #[Serializer\Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s'])]
     public function getLastLoginAt(): ?\DateTime
     {
         return $this->last_login_at;
