@@ -14,9 +14,6 @@ services:
       - 3306:3306
     networks:
       - symfony
-    env_file:
-      - .env
-      - .env.local
   php:
     build:
       context: ./php
@@ -24,6 +21,8 @@ services:
         TIMEZONE: ${TIMEZONE}
     volumes:
       - ../backend:/var/www/app:cached
+    depends_on:
+      - db
     networks:
       - symfony
   nginx:
