@@ -24,20 +24,30 @@ class UserController extends AbstractController
         response: 200,
         description: 'Returns user list',
         content: new OA\JsonContent(
-            type: 'array',
-            items: new OA\Items(ref: new Model(type: User::class))
+            properties: [
+                new OA\Property(property: "currentPage", type: "integer", minimum: 1),
+                new OA\Property(property: "lastPage", type: "integer", minimum: 1),
+                new OA\Property(property: "pageSize", type: "integer", minimum: 1),
+                new OA\Property(property: "previousPage", type: "integer", minimum: 1),
+                new OA\Property(property: "nextPage", type: "integer", minimum: 1),
+                new OA\Property(property: "toPaginate", type: "boolean"),
+                new OA\Property(property: "numResults", type: "integer"),
+                new OA\Property(property: "results",  type: 'array', items: new OA\Items(ref: new Model(type: User::class)))
+            ],
         )
     )]
     #[OA\Parameter(
         name: 'page',
         in: 'query',
         description: 'The current page number field',
+        example: 1,
         schema: new OA\Schema(type: 'int')
     )]
     #[OA\Parameter(
         name: 'pageSize',
         in: 'query',
         description: 'The field of record nums per page',
+        example: 10,
         schema: new OA\Schema(type: 'int')
     )]
     #[OA\Parameter(
@@ -70,7 +80,7 @@ class UserController extends AbstractController
         name: 'userTypes',
         in: 'query',
         description: 'The field used to filter user user_type value, multiple values should be seperated by english comma `,`',
-        example: ['1', '1,2'],
+        example: "1,2",
         schema: new OA\Schema(type: 'string')
     )]
     #[OA\Tag(name: 'users')]
