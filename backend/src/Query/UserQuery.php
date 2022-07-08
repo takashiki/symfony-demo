@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserQuery
 {
+    public const TIME_FORMAT = 'Y-m-d H:i:s';
+
     /**
      * @var int|null
      */
@@ -34,7 +36,6 @@ class UserQuery
 
     public function applyFromRequest(Request $request): UserQuery
     {
-        //todo validator
         $isActive = $request->query->get('isActive');
         //if `isActive` is empty string, intval will change it to `0`, so we need to check this
         if ($isActive !== null && $isActive !== '') {
@@ -48,12 +49,12 @@ class UserQuery
 
         $lastLoginFrom = $request->query->get('lastLoginFrom');
         if ($lastLoginFrom) {
-            $this->lastLoginFrom = new DateTime($lastLoginFrom);
+            $this->lastLoginFrom = DateTime::createFromFormat(static::TIME_FORMAT, $lastLoginFrom);
         }
 
         $lastLoginTo = $request->query->get('lastLoginTo');
         if ($lastLoginTo) {
-            $this->lastLoginTo = new DateTime($lastLoginTo);
+            $this->lastLoginTo = DateTime::createFromFormat(static::TIME_FORMAT, $lastLoginTo);
         }
 
         $userTypes = $request->query->get('userTypes');
